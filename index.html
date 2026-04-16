@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gallery Memories</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>📸 Gallery Memories</h2>
+
+<button onclick="login()">Login with Google</button>
+<button onclick="logout()">Logout</button>
+<p id="user"></p>
+
+<input type="file" id="upload" multiple accept="image/*">
+<div id="gallery"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
