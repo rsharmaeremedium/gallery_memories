@@ -89,3 +89,25 @@ auth.onAuthStateChanged(user => {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('./service-worker.js');
 }
+
+document.getElementById("uploadBtn").onclick = () => {
+  document.getElementById("upload").click();
+};
+
+function displayImage(url) {
+  let img = document.createElement("img");
+  img.src = url;
+
+  img.onclick = () => openViewer(url);
+
+  gallery.appendChild(img);
+}
+
+function openViewer(url) {
+  document.getElementById("viewerImg").src = url;
+  document.getElementById("viewer").style.display = "flex";
+}
+
+function closeViewer() {
+  document.getElementById("viewer").style.display = "none";
+}
