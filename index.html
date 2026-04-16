@@ -6,18 +6,11 @@
 
   <link rel="stylesheet" href="style.css">
 
-  <!-- Icons -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 </head>
 
 <body>
 
-<!-- Header -->
 <div class="header">
   <h2>📸 Memories</h2>
 
@@ -29,21 +22,24 @@
   <p id="user"></p>
 </div>
 
-<!-- Gallery -->
 <div id="gallery" class="gallery"></div>
 
-<!-- Upload -->
 <input type="file" id="upload" multiple accept="image/*" hidden>
 
 <button id="uploadBtn">
   <span class="material-icons">add_a_photo</span>
 </button>
 
-<!-- Viewer -->
 <div id="viewer" class="viewer" onclick="closeViewer()">
   <img id="viewerImg">
 </div>
 
+<!-- ✅ Firebase MUST be here -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+
+<!-- ✅ Your script LAST -->
 <script src="app.js"></script>
 
 </body>
