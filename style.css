@@ -8,11 +8,21 @@ body {
 .header {
   background: #fff;
   padding: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Gallery Grid */
+.auth button {
+  padding: 6px 12px;
+  margin: 3px;
+  border: none;
+  border-radius: 20px;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* Gallery */
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -28,7 +38,7 @@ body {
   cursor: pointer;
 }
 
-/* Floating Button */
+/* Floating button */
 #uploadBtn {
   position: fixed;
   bottom: 20px;
@@ -43,7 +53,7 @@ body {
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-/* Fullscreen Viewer */
+/* Viewer */
 .viewer {
   position: fixed;
   top: 0;
@@ -59,18 +69,4 @@ body {
 .viewer img {
   max-width: 90%;
   max-height: 90%;
-}
-
-.auth {
-  margin-top: 5px;
-}
-
-.auth button {
-  padding: 6px 12px;
-  margin: 3px;
-  border: none;
-  border-radius: 20px;
-  background: #000;
-  color: #fff;
-  cursor: pointer;
 }

@@ -5,116 +5,37 @@ const firebaseConfig = {
   projectId: "gallery-memories",
 };
 
+
 firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
+const storage = firebase.storage();
 
 let gallery = document.getElementById("gallery");
 
-// Login
+// LOGIN
 function login() {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider)
-    .then(result => {
-      document.getElementById("user").innerText =
-        "Welcome " + result.user.displayName;
-      loadImages();
-    })
     .catch(err => alert(err.message));
 }
 
-// Logout
+// LOGOUT
 function logout() {
   auth.signOut();
-  document.getElementById("user").innerText = "";
-  gallery.innerHTML = "";
 }
 
-// Upload
-document.getElementById("upload").addEventListener("change", function(e) {
-  const user = auth.currentUser;
-  if (!user) return alert("Login first!");
+// BUTTONS
+window.onload = () => {
+  document.getElementById("loginBtn").onclick = login;
+  document.getElementById("logoutBtn").onclick = logout;
 
-  let files = e.target.files;
-
-  for (let file of files) {
-    let reader = new FileReader();
-    reader.onload = function(event) {
-      let img = document.createElement("img");
-      img.src = event.target.result;
-      gallery.appendChild(img);
-
-      saveImage(event.target.result);
-    };
-    reader.readAsDataURL(file);
-  }
-});
-
-// Save per user
-function saveImage(data) {
-  const user = auth.currentUser;
-  let key = "memories_" + user.uid;
-
-  let images = JSON.parse(localStorage.getItem(key) || "[]");
-  images.push({data, date: new Date()});
-  localStorage.setItem(key, JSON.stringify(images));
-}
-
-// Load per user
-function loadImages() {
-  const user = auth.currentUser;
-  if (!user) return;
-
-  let key = "memories_" + user.uid;
-  let images = JSON.parse(localStorage.getItem(key) || "[]");
-
-  gallery.innerHTML = "";
-
-  images.forEach(imgData => {
-    let img = document.createElement("img");
-    img.src = imgData.data;
-    gallery.appendChild(img);
-  });
-}
-
-// Auto login state
-auth.onAuthStateChanged(user => {
-  if (user) {
-    document.getElementById("user").innerText =
-      "Welcome " + user.displayName;
-    loadImages();
-  }
-});
-
-// Service Worker
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./service-worker.js');
-}
-
-document.getElementById("uploadBtn").onclick = () => {
-  document.getElementById("upload").click();
+  document.getElementById("uploadBtn").onclick = () => {
+    document.getElementById("upload").click();
+  };
 };
 
-function displayImage(url) {
-  let img = document.createElement("img");
-  img.src = url;
-
-  img.onclick = () => openViewer(url);
-
-  gallery.appendChild(img);
-}
-
-function openViewer(url) {
-  document.getElementById("viewerImg").src = url;
-  document.getElementById("viewer").style.display = "flex";
-}
-
-function closeViewer() {
-  document.getElementById("viewer").style.display = "none";
-}
-
-document.getElementById("loginBtn").onclick = login;
-document.getElementById("logoutBtn").onclick = logout;
-
+// AUTH STATE
 auth.onAuthStateChanged(user => {
   if (user) {
     document.getElementById("user").innerText =
@@ -126,10 +47,67 @@ auth.onAuthStateChanged(user => {
     loadImages();
   } else {
     document.getElementById("user").innerText = "";
+    gallery.innerHTML = "";
 
     document.getElementById("loginBtn").style.display = "inline-block";
     document.getElementById("logoutBtn").style.display = "none";
-
-    gallery.innerHTML = "";
   }
 });
+
+// UPLOAD
+document.getElementById("upload").addEventListener("change", function(e) {
+  const user = auth.currentUser;
+  if (!user) return alert("Login first!");
+
+  let files = e.target.files;
+
+  for (let file of files) {
+    let fileName = Date.now() + "_" + file.name;
+
+    let ref = storage.ref("memories/" + user.uid + "/" + fileName);
+
+    ref.put(file).then(() => {
+      ref.getDownloadURL().then(url => {
+        displayImage(url);
+      });
+    });
+  }
+});
+
+// DISPLAY IMAGE
+function displayImage(url) {
+  let img = document.createElement("img");
+  img.src = url;
+
+  img.onclick = () => openViewer(url);
+
+  gallery.appendChild(img);
+}
+
+// LOAD IMAGES
+function loadImages() {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  const listRef = storage.ref("memories/" + user.uid);
+
+  listRef.listAll().then(res => {
+    gallery.innerHTML = "";
+
+    res.items.forEach(item => {
+      item.getDownloadURL().then(url => {
+        displayImage(url);
+      });
+    });
+  });
+}
+
+// VIEWER
+function openViewer(url) {
+  document.getElementById("viewerImg").src = url;
+  document.getElementById("viewer").style.display = "flex";
+}
+
+function closeViewer() {
+  document.getElementById("viewer").style.display = "none";
+}
