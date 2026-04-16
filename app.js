@@ -111,3 +111,25 @@ function openViewer(url) {
 function closeViewer() {
   document.getElementById("viewer").style.display = "none";
 }
+
+document.getElementById("loginBtn").onclick = login;
+document.getElementById("logoutBtn").onclick = logout;
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    document.getElementById("user").innerText =
+      "Welcome " + user.displayName;
+
+    document.getElementById("loginBtn").style.display = "none";
+    document.getElementById("logoutBtn").style.display = "inline-block";
+
+    loadImages();
+  } else {
+    document.getElementById("user").innerText = "";
+
+    document.getElementById("loginBtn").style.display = "inline-block";
+    document.getElementById("logoutBtn").style.display = "none";
+
+    gallery.innerHTML = "";
+  }
+});

@@ -60,3 +60,17 @@ body {
   max-width: 90%;
   max-height: 90%;
 }
+
+.auth {
+  margin-top: 5px;
+}
+
+.auth button {
+  padding: 6px 12px;
+  margin: 3px;
+  border: none;
+  border-radius: 20px;
+  background: #000;
+  color: #fff;
+  cursor: pointer;
+}
